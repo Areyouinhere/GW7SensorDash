@@ -2,7 +2,7 @@ name: Build WearOS APK
 on: [push]
 
 env:
-  PROJECT_DIR: '.'
+  PROJECT_DIR: '.'   # change to 'GW7SensorDash' if your Gradle files are in that subfolder
 
 jobs:
   build:
@@ -45,10 +45,20 @@ jobs:
           fi
           ./gradlew --version
 
-      - name: Build debug APK (verbose)
-        run: ./gradlew --no-daemon --stacktrace --info assembleDebug
+      - name: Build debug APK (verbose; log to file)
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon --stacktrace --info assembleDebug 2>&1 | tee gradle-build.log
+
+      - name: Upload build log (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build-log
+          path: ${{ env.PROJECT_DIR }}/gradle-build.log
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: gw7-sensor-dash-debug-apk
