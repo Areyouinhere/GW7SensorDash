@@ -2,7 +2,7 @@ name: Build WearOS APK
 on: [push]
 
 env:
-  PROJECT_DIR: 'GW7SensorDash'   # change to 'GW7SensorDash' if your Gradle files are in that subfolder
+  PROJECT_DIR: 'GW7SensorDash_clean'   # change to 'GW7SensorDash' if your Gradle files are in that subfolder
 
 jobs:
   build:
